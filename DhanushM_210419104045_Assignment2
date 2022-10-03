@@ -1,0 +1,47 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "\\#!/usr/bin/python import struct, array, time, io, fcntl\n",
+    "\n",
+    "I2C_SLAVE=0x0703\n",
+    "\n",
+    "# find with sudo i2cdetect -y 1\n",
+    "\n",
+    "HDC1008_ADDR = 0x40\n",
+    "\n",
+    "bus=1 fr = io.open(“/dev/i2c-”+str(bus), “rb”, buffering=0) fw =\n",
+    "io.open(“/dev/i2c-”+str(bus), “wb”, buffering=0)\n",
+    "\n",
+    "# set device address\n",
+    "\n",
+    "fcntl.ioctl(fr, I2C_SLAVE, HDC1008_ADDR) fcntl.ioctl(fw, I2C_SLAVE,\n",
+    "HDC1008_ADDR) time.sleep(0.015) \\#15ms startup time\n",
+    "\n",
+    "s = \\[0x02,0x02,0x00\\] s2 = bytearray( s ) fw.write( s2 ) \\#sending\n",
+    "config register bytes time.sleep(0.015) \\# From the data sheet\n",
+    "\n",
+    "s = \\[0x00\\] \\# temp s2 = bytearray( s ) fw.write( s2 )\n",
+    "time.sleep(0.0625) \\# From the data sheet\n",
+    "\n",
+    "data = fr.read(2) \\#read 2 byte temperature data buf = array.array(‘B’,\n",
+    "data) print ( “Temp: %f” % ( ((((buf\\[0\\]\\<\\<8) +\n",
+    "(buf\\[1\\]))/65536.0)\\*165.0 ) - 40.0 ) )\n",
+    "\n",
+    "time.sleep(0.015) \\# From the data sheet\n",
+    "\n",
+    "s = \\[0x01\\] \\# hum s2 = bytearray( s ) fw.write( s2 )\n",
+    "time.sleep(0.0625) \\# From the data sheet\n",
+    "\n",
+    "data = fr.read(2) \\#read 2 byte temperature data buf = array.array(‘B’,\n",
+    "data) print ( “Humidity: %f” % ( ((((buf\\[0\\]\\<\\<8) +\n",
+    "(buf\\[1\\]))/65536.0)\\*100.0 ) ) )"
+   ]
+  }
+ ],
+ "nbformat": 4,
+ "nbformat_minor": 5,
+ "metadata": {}
+}
