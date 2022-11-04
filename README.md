@@ -1,7 +1,10 @@
+<div align="center">
+ 
+![ibm-logo](https://user-images.githubusercontent.com/114343907/200034051-59716054-bf8a-4512-8381-2d06199ebccb.jpg)
 # IBM-Project-50632-1660919658
 
 # Smart Waste Management System For Metropolitan Cities
-
+</div>
 Category:Internet Of Things
 
 # Team Members :
@@ -27,3 +30,5 @@ Category:Internet Of Things
 
 
   ![download](https://user-images.githubusercontent.com/114343907/200028498-b4fafe12-ec2b-4b99-b3dc-8039439193b1.png)
+
+How to reach Us <a href = "mailto: vishalsuryaskcse2019@citchennai.net">Connect with Email</a>
