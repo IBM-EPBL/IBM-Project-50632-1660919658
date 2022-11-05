@@ -1,0 +1,104 @@
+# Cde for sensor working 
+
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 20, 4);
+float cm;
+float inches;
+
+
+#define ECHO_PIN 12
+#define TRIG_PIN 13
+float dist;
+
+void setup() 
+{
+  Serial.begin(115200);
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  //pir pin
+  pinMode(34, INPUT);
+
+  //ledpins
+  pinMode(23, OUTPUT);
+  pinMode(22, OUTPUT);
+  pinMode(21, OUTPUT);
+  pinMode(15, OUTPUT);
+  
+
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(1, 0);
+  lcd.print("");
+}
+
+float readcmCM() 
+{
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+  int duration = pulseIn(ECHO_PIN, HIGH);
+  return duration * 0.034 / 2;
+}
+
+void loop()
+ {
+ 
+ 
+  if(digitalRead(34))                                 //pir motion detection
+  {
+    Serial.println("Motion Detected");
+    Serial.println("Lid Opened");
+    digitalWrite(10, HIGH);
+    delay(10000);
+    Serial.println("Lid Closed");
+   
+  }
+  else
+  {
+    digitalWrite(10, LOW);
+  }
+
+  if(cm <= 100)                                        //Bin level detection
+  {
+    digitalWrite(21, HIGH);
+    Serial.println("High Alert!!!,Trash bin is about to be full");
+    digitalWrite(22, LOW);
+    digitalWrite(23, LOW);
+  }
+  else if(cm > 150 && cm < 250)
+  {
+    digitalWrite(22, HIGH);
+    Serial.println("Warning!!,Trash is about to cross 50% of bin level");
+    digitalWrite(21, LOW);
+    digitalWrite(23, LOW);
+  }
+  else if(cm > 250 && cm <=400)
+  {
+    digitalWrite(23, HIGH);
+    Serial.println("Bin is available");
+    digitalWrite(21, LOW);
+    digitalWrite(22, LOW);
+  }                                        
+
+float inches = (cm / 2.54);                                      //print on lcd
+  lcd.setCursor(0,0);
+	lcd.print("Inches");
+	lcd.setCursor(4,0);
+	lcd.setCursor(12,0);
+	lcd.print("cm");
+	lcd.setCursor(1,1);
+	lcd.print(inches, 1);
+	lcd.setCursor(11,1);
+	lcd.print(cm, 1);
+	lcd.setCursor(14,1);
+	delay(1000);
+	lcd.clear();
+  
+ }
+ 
+ 
+ 
+ https://wokwi.com/projects/347331949637927506
